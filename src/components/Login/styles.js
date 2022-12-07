@@ -19,8 +19,8 @@ height: 557.67px;
 margin: 0 auto;
 text-align: center;
 img{
-    width: 101px;
-    height: 14px;
+    width: 144px;
+    height: 19.97px;
 }
 @media(max-width: 700px) {
    margin-top: 81px;
@@ -35,6 +35,9 @@ margin-top: 30px;
 border: transparent;
 border-radius: 4px;
 box-shadow: rgba(0, 0, 0, 0.25);
+display: flex;
+flex-direction: column;
+padding-left: 22px;
 @media(max-width: 700px) {
    width: 296px;
    height: 402.69px;
@@ -47,6 +50,7 @@ export const StyledLoginPTop = styled.p`
 font-size: 18px;
 font-weight: 700;
 color: var(--grey-0);
+text-align: center;
 padding-top: 42px;
 padding-bottom: 6px;
 @media(max-width: 700px) {
@@ -60,7 +64,6 @@ export const StyledLoginLabel = styled.label`
 font-size: 12.18px;
 font-weight: 400;
 color: var(--grey-0);
-padding-left: 22px;
 display: flex;
 justify-content: flex-start;
 margin-top: 20px;
@@ -101,6 +104,7 @@ color: #FFFFFF;
 font-size: 16px;
 font-weight: 500;
 cursor: pointer;
+margin-left: 2px;
 @media(max-width: 700px) {
    width: 259.9px;
    height: 38.5px;
@@ -111,6 +115,7 @@ cursor: pointer;
 export const StyledLoginPBot = styled.p`
 font-size: 12px;
 font-weight: 600;
+text-align: center;
 color: var(--grey-1);
 margin-top: 34px;
 @media(max-width: 700px) {
@@ -128,6 +133,7 @@ border-radius: 4.06066px;
 color: #FFFFFF;
 font-size: 16px;
 font-weight: 500;
+margin-right: 20px;
 cursor: pointer;
 @media(max-width: 700px) {
    width: 259.9px;

@@ -15,6 +15,12 @@ body {
   background-color: #000000;
 }
 
+p {
+  color: var(--color-primary-focus);
+  font-size: 12px;
+  text-align: left;
+}
+
 :root {
     --color-primary: #FF577F;
     --color-primary-focus: #FF427F;

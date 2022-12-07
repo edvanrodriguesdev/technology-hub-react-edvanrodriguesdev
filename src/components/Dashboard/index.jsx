@@ -9,14 +9,14 @@ import {
 } from "./styles";
 import { Header } from "../Header";
 
-export const Dashboard = () => {
+export const Dashboard = ({ user, userLogout }) => {
   return (
     <>
-      <Header></Header>
+      <Header userLogout={userLogout} />
       <StyledDashboard>
         <StyledDashboardContainer>
-          <StyledDashboardProfile>Olá, Samuel Leão</StyledDashboardProfile>
-          <StyledDashboardProfileInfo>Primeiro módulo  (Introdução ao Frontend)</StyledDashboardProfileInfo>
+          <StyledDashboardProfile>Olá, {user.name}</StyledDashboardProfile>
+          <StyledDashboardProfileInfo>{user.course_module}</StyledDashboardProfileInfo>
         </StyledDashboardContainer>
       </StyledDashboard>
       <StyledDashboardDev>

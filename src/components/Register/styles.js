@@ -173,8 +173,3 @@ export const StyledRegisterButton = styled.button`
   }
 `;
 
-export const StyledRegisterPErrors = styled.p`
-color: var(--color-primary-focus);
-font-size: 12px;
-font-weight: 400;
-`

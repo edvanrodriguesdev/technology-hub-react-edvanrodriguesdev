@@ -1,25 +1,37 @@
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { RoutesComponent } from './routes';
+import { useNavigate } from "react-router-dom";
 
-import { GlobalStyle } from './styles/global';
-import { Routes, Route } from 'react-router-dom'
-import { Login } from './components/Login';
-import { Register } from './components/Register';
-import { Dashboard } from './components/Dashboard';
-import { useState } from 'react';
 
 
 function App() {
 
+const [user, setUser] = useState(null)
+const navigate = useNavigate();
 
+function userLogout() {
+  localStorage.removeItem("@TOKEN");
+  localStorage.removeItem("@USERID")
+  setUser(null);
+  navigate("/");
+}
 
   return (
     <div className="App">
-      <GlobalStyle/>
-      <Routes>
-        <Route path='/' element={ <Login /> } />
-        <Route path='register' element={ <Register /> } />
-        <Route path='dashboard' element={ <Dashboard /> } />
-        <Route path='*' element={ <Login /> } />
-      </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={500}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        rtl={false}
+        theme="light"
+      />
+      <RoutesComponent userLogout={userLogout} user={user} setUser={setUser} />
     </div>
   );
 }

@@ -10,7 +10,6 @@ import {
   StyledRegisterInput,
   StyledRegisterSelect,
   StyledRegisterButton,
-  StyledRegisterPErrors
 } from "./styles";
 import Logo from "../../assets/img/logo.svg";
 import { useNavigate } from "react-router-dom";
@@ -18,17 +17,14 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from 'axios';
+import { api } from "../../api/api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export const Register = () => {
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
-
-  const handleRegisterForm = (event) => {
-    event.preventDefault();
-
-    navigate("/");
-  };
 
   const backButton = () => navigate(-1);
 
@@ -61,36 +57,58 @@ export const Register = () => {
     email: yup
       .string()
       .required("O e-mail é obrigatório!")
-      .email("um e-mail válido precisa ser informado"),
+      .email("Um e-mail válido precisa ser informado"),
     password: yup
       .string()
       .required("A senha é obrigatória!")
-      .matches(/(?=.*?[a-z])/, "A senha precisa ter pelo menos uma letra minúscula.")
+      .matches(
+        /(?=.*?[a-z])/,
+        "A senha precisa ter pelo menos uma letra minúscula."
+      )
       .matches(/(?=.*?[0-9])/, "A senha precisa ter pelo menos um número.")
       .matches(
         /(?=.*?[#?!@$%^&*-])/,
         "A senha precisa ter pelo menos um caractere especial."
       )
       .min(8, "A senha deve contar no mínimo 8 (oito) caracteres"),
+    rptpassword: yup
+      .string()
+      .required("A senha é obrigatória!")
+      .oneOf([yup.ref("password")], "As senhas não correspondem!" ),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
+    mode: "onBlur",
     resolver: yupResolver(registerSchema),
   });
 
-  const BaseURL = 'https://kenziehub.herokuapp.com/'
-  const submit = (data) => {
-    axios.post(BaseURL + 'users/')
-    .then((response) => {
-        
-    })
+  const userRegister = async (formData) => {
+    try {
+      setLoading(true)
+      const response = await api.post('users', formData)
+      toast.success("Cadastro realizado com sucesso!")
+    } catch (error) {
+      toast.error("Ops, algo deu errado!")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const submit = async (data) => {
+    await userRegister(data)
+
+    reset()
+    navigate("/")
   };
 
   return (
+    <>
+    
     <StyledRegister>
       <StyledRegisterDiv>
         <StyledRegisterDivTop>
@@ -111,7 +129,7 @@ export const Register = () => {
             placeholder="Digite aqui seu nome"
             {...register("name")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.name?.message && <p>{errors.name.message}</p>}</StyledRegisterPErrors>
+          {errors.name?.message && <p>{errors.name.message}</p>}
           <StyledRegisterLabel htmlFor="email">Email</StyledRegisterLabel>
           <StyledRegisterInput
             type="email"
@@ -119,7 +137,7 @@ export const Register = () => {
             placeholder="Digite aqui seu email"
             {...register("email")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.email?.message && <p>{errors.email.message}</p>}</StyledRegisterPErrors>
+          {errors.email?.message && <p>{errors.email.message}</p>}
           <StyledRegisterLabel htmlFor="password">Senha</StyledRegisterLabel>
           <StyledRegisterInput
             type="password"
@@ -127,7 +145,7 @@ export const Register = () => {
             placeholder="Digite aqui sua senha"
             {...register("password")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.password?.message && <p>{errors.password.message}</p>}</StyledRegisterPErrors>
+          {errors.password?.message && <p>{errors.password.message}</p>}
           <StyledRegisterLabel htmlFor="rptpassword">
             Confirmar Senha
           </StyledRegisterLabel>
@@ -137,7 +155,7 @@ export const Register = () => {
             placeholder="Digite novamente sua senha"
             {...register("rptpassword")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.rptpassword?.message && <p>{errors.rptpassword.message}</p>}</StyledRegisterPErrors>
+          {errors.rptpassword?.message && <p>{errors.rptpassword.message}</p>}
           <StyledRegisterLabel htmlFor="bio">Bio</StyledRegisterLabel>
           <StyledRegisterInput
             type="text"
@@ -145,7 +163,7 @@ export const Register = () => {
             placeholder="Fale sobre você"
             {...register("bio")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.bio?.message && <p>{errors.bio.message}</p>}</StyledRegisterPErrors>
+          {errors.bio?.message && <p>{errors.bio.message}</p>}
           <StyledRegisterLabel htmlFor="contact">Contato</StyledRegisterLabel>
           <StyledRegisterInput
             type="text"
@@ -153,7 +171,7 @@ export const Register = () => {
             placeholder="Opção de contato"
             {...register("contact")}
           ></StyledRegisterInput>
-          <StyledRegisterPErrors>{errors.contact?.message && <p>{errors.contact.message}</p>}</StyledRegisterPErrors>
+          {errors.contact?.message && <p>{errors.contact.message}</p>}
           <StyledRegisterLabel htmlFor="module">
             Selecionar módulo
           </StyledRegisterLabel>
@@ -168,22 +186,13 @@ export const Register = () => {
               </option>
             ))}
           </StyledRegisterSelect>
-          <StyledRegisterButton type="submit">Cadastrar</StyledRegisterButton>
+          <StyledRegisterButton type="submit" disabled={loading}>
+            {loading ? "Cadastrando..." : "Cadastrar"}
+            </StyledRegisterButton>
         </StyledRegisterForm>
       </StyledRegisterDiv>
     </StyledRegister>
+    </>
   );
 };
 
-//const RegForm = () => {
-//
-//    const [name, setName] = useState('')
-//
-//    const handleChange = (e) => {
-//      setName(e.target.value)
-//    }
-//
-//    const submitRegForm = (e) => {
-//      e.preventDefault()
-//    }
-//}
