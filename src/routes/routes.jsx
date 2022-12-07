@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Login } from "./components/Login";
-import { Register } from "./components/Register";
-import { Dashboard } from "./components/Dashboard";
+import { Login } from "../components/Login";
+import { Register } from "../components/Register";
+import { Dashboard } from "../components/Dashboard";
 
 export const RoutesComponent = ({ setUser, user, userLogout }) => {
   return (

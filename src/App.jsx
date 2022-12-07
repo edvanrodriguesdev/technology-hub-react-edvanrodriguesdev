@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { RoutesComponent } from './routes';
+import { RoutesComponent } from '../src/routes/routes';
 import { useNavigate } from "react-router-dom";
 
 
