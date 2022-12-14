@@ -17,12 +17,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { api } from "../../api/api";
+import { useContext, useState } from "react";
+import { UserContext } from "../../provides/UserContext";
 
-export const Login = ({ setUser }) => {
-  const [loading, setLoading] = useState(false);
+
+export const Login = () => {
   const navigate = useNavigate();
+  const { userLogin } = useContext(UserContext)
+  const { loading } = useContext(UserContext)
 
   const loginSchema = yup.object().shape({
     email: yup
@@ -42,20 +44,6 @@ export const Login = ({ setUser }) => {
     resolver: yupResolver(loginSchema),
   });
 
-  const userLogin = async (formData) => {
-    try {
-      setLoading(true);
-      const response = await api.post("sessions", formData);
-      localStorage.setItem("@TOKEN", response.data.token);
-      localStorage.setItem("@USERID", response.data.user.id)
-      setUser(response.data.user);
-      toast.success("Login realizado com sucesso!");
-    } catch (error) {
-      toast.error("Ops, algo deu errado!");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const submit = async (data) => {
     await userLogin(data) 

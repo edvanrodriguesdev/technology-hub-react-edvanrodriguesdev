@@ -14,17 +14,17 @@ import {
 import Logo from "../../assets/img/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../api/api";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../../provides/UserContext";
 
 
 export const Register = () => {
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  const { userRegister } = useContext(UserContext)
+  const { loading } = useContext(UserContext)
 
   const backButton = () => navigate(-1);
 
@@ -87,17 +87,6 @@ export const Register = () => {
     resolver: yupResolver(registerSchema),
   });
 
-  const userRegister = async (formData) => {
-    try {
-      setLoading(true)
-      const response = await api.post('users', formData)
-      toast.success("Cadastro realizado com sucesso!")
-    } catch (error) {
-      toast.error("Ops, algo deu errado!")
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const submit = async (data) => {
     await userRegister(data)
