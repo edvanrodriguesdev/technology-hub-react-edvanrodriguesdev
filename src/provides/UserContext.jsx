@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setTechs } = useContext(TechContext)
+ 
 
   useEffect(() => {
     const token = localStorage.getItem("@TOKEN");
@@ -44,31 +44,9 @@ export const UserProvider = ({ children }) => {
     authLogin();
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem("@TOKEN");
 
-    async function refresh() {
-      if (token) {
-        try {
-          setGlobalLoading(true);
-          const response = await api.get("profile", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
 
-          await setTechs(response.data.techs);
 
-          navigate("/dashboard");
-        } catch (error) {
-
-        } finally {
-          setGlobalLoading(false);
-        }
-      }
-    }
-    refresh();
-  }, []);
 
   const userLogin = async (formData) => {
     try {
@@ -122,4 +100,4 @@ export const UserProvider = ({ children }) => {
       {children}
     </UserContext.Provider>
   );
-};
+}

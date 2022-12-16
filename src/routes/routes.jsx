@@ -11,13 +11,13 @@ export const RoutesComponent = () => {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="register" element={<Register />} />
-      <Route path="dashboard" element={<ProtectedRoutes />}>
+      <Route path="dashboard" element={ <ProtectedRoutes />  }>
+        
         <Route
           index
           element={
-            <UserProvider>
               <Dashboard />
-            </UserProvider>
+   
           }
         />
       </Route>

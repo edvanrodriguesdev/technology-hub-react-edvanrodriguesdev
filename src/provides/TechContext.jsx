@@ -1,12 +1,12 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../api/api";
+import { UserContext } from "./UserContext";
 
 export const TechContext = createContext({});
 
 export const TechProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -15,7 +15,14 @@ export const TechProvider = ({ children }) => {
   const [statusTech, setStatusTech] = useState(null);
   const [techs, setTechs] = useState([]);
   const token = localStorage.getItem("@TOKEN");
+  const { user } = useContext(UserContext)
 
+
+  useEffect(() => {
+    if(!!user){
+       setTechs(user.techs)
+    }
+}, [user])
 
   const createTech = async (formData) => {
     try {
@@ -25,7 +32,7 @@ export const TechProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(response.data);
+      
       Reload();
       toast.success("Alteração realizada com sucesso!");
       setLoading(false);
@@ -45,7 +52,7 @@ export const TechProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser(response.data);
+        
         Reload();
 
         toast.success("Status editado com sucesso!");
@@ -67,7 +74,7 @@ export const TechProvider = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser(response.data);
+        
         Reload();
         toast.success("Tecnologia apagada com sucesso!");
         setLoading(false);
@@ -91,14 +98,14 @@ export const TechProvider = ({ children }) => {
         loading,
         createTech,
         deleteTech,
-        user,
+       
         setAddModal,
         addModal,
         editModal,
         setEditModal,
         idTech,
         setIdTech,
-        setUser,
+      
         titleTech,
         setTitleTech,
         editTech,
